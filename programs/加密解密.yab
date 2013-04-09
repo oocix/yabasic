@@ -1,0 +1,31 @@
+clear screen
+m$="Welcome to my Yis.G.E.!!!!"+chr$(10)+"*Http://Yisge.51Letu.Com*"
+my=12
+?"*-----------*"
+?"|  密钥:",my,"  |"
+?"*-----------*"
+?"待加密字符:"
+?m$
+?"----------------------"
+?"加密:"
+in$=m$
+gosub j
+?out$
+?"----------------------"
+?"解密还原:"
+in$=out$
+my=0-my
+gosub j
+?out$
+?"----------------------"
+?"呵呵,配合Open语句,大有用处...."
+?@(1,18)"Made by Moyu"
+?@(1,19)
+end
+label j
+out$=""
+for i=1 to len(in$)
+z$=mid$(in$,i,1)
+out$=out$+chr$(asc(z$)+my)
+next
+return

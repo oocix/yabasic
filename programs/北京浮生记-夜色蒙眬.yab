@@ -1,0 +1,726 @@
+label kai
+clear screen
+?reverse@(7,2)"北京浮生记-夜色蒙眬"
+?@(8,8+mov)"[","       ","   ]"
+?@(9,8)"[","&新游戏&","]"
+?@(9,10)"[","装载存档","]"
+?@(9,12)"[","&英雄榜&","]"
+?@(9,14)"[","退出游戏","]"
+?@(9,8+mov)" "
+?@(18,8+mov)" "
+s$=inkey$
+if s$="keya5" and mov>0 then
+mov=mov-2
+elsif s$="keya6" and mov<6 then
+mov=mov+2
+elsif s$="keya4" then goto en2
+elsif s$="keya7" then
+on mov/2+1 goto t2,zai,bang,en2
+fi
+goto kai
+label t2
+clear screen
+?reverse@(2,2)"游戏前言"
+?"在本游戏中你扮演的是一位20多岁的青年,"8在一些不良少年"
+?"的介绍下,你便大胆地做起了非法的买卖.."
+?"下面,开始你的买卖吧...."
+inkey$
+q=3000:w=100:e=50:r=100:zh=2500:y=0:s2=0:d2=0:g2=0:h2=0:j2=0
+s3=0:d3=0:g3=0:h3=0:j3=0:kk=0
+label t
+clear screen
+box 1,1 to 159,239
+box 2,2 to 158,238
+label ne
+if r<=20 then
+clear screen
+?@(10,10)"身体虚弱!"
+fi
+if r<=0 then
+?@(7,10)"健康为0,送院后不治"
+inkey$
+clear screen
+?@(2,7)"得分:",q-zh,"   ","等级:特级"
+?@(10,9)"为金钱而献身"
+if q-zh<s3 then 
+?@(5,11)"未能挤入英雄榜,还需努力"
+inkey$
+end
+elsif q-zh>s3 then
+?@(5,2)"英雄榜功能已剃除"
+?@(2,5)"抱歉,E+E不支持Open语句.!"
+fi
+?reverse@(7,2)"北京浮生记-夜色蒙眬"
+?@(9,3)"[nacik]制做"
+?@(2,4)"金钱:",q
+?@(2,5)"库存",y,"/",w
+?@(2,5)"还有",e,"天"
+?@(2,6)"欠债:",zh
+?@(2,6)"健康:",r,"/100"
+tty=1
+label tt
+?@(8,8+tty)"=>"
+?@(8,7+tty)"  "
+?@(8,9+tty)"  "
+?@(10,9)"[1].黑店"
+?@(10,10)"[2].仓库"
+?@(10,11)"[3].中介"
+?@(10,12)"[4].医院"
+?@(10,13)"[5].地铁"
+?@(10,14)"[6].邮局"
+?@(1,16)"上下曲键选择,背光键确认,"
+?"停止键退出"
+k$=inkey$
+if k$="keya5" and tty>0 then:tty=tty-1:goto tt:fi
+if k$="keya6" and tty<6 then:tty=tty+1:goto tt:fi
+if k$="keya4" then:goto en:fi
+if k$="keya7" then
+on tty goto u,i,o,p,a,yo
+fi
+label u
+s=s3+30:d=d3+100:f=200+f3:g=1000+g3:h=h3+8000:j=j3+11090
+clear screen
+if v=0 then
+ma=(q-mod(q,s))/s
+mi=s2
+elsif v=2 then
+ma=(q-mod(q,d))/d
+mi=d2
+elsif v=4 then
+ma=(q-mod(q,g))/g
+mi=g2
+elsif v=6 then
+ma=(q-mod(q,h))/h
+mi=h2
+elsif v=8 then
+ma=(q-mod(q,j))/j
+mi=j2
+fi
+?reverse@(12,2)"黑店"
+?@(3,4)"背光键确认,停止键返回"
+?@(7,6)"1.盗版vcd:$",s
+?@(7,8)"2.伪劣化妆品:$",d
+?@(7,10)"3.假手机:$",g
+?@(7,12)"4.上海小宝:$",h
+?@(7,14)"5.轿车",j
+?@(4,6+v)"=>"
+?reverse@(3,15)"交易助手"
+?@(12,15)"可以买入:",ma
+?@(3,17)"可以卖出:",mi
+?@(18,17)"库存剩下:",w-y
+k$=inkey$
+if (k$="keya5" and v>=2) then v=v-2
+elsif (k$="keya6" and v<8) then v=v+2
+elsif k$="keya4" then goto t
+elsif k$="keya7" then goto k 
+endif
+goto u
+label k
+?@(3,18)"播放.买进/停止.卖出"
+k$=inkey$
+if k$="keya3" then goto l
+elsif k$="keya4" then goto x
+else goto u
+endif
+label l
+?@(3,19)"买入数量:",z
+if z+y>w then
+clear screen
+?@(5,10)"仓库容量不足"
+inkey$
+goto u
+elsif z<1 then
+clear screen
+?@(10,10)"非法输入"
+inkey$
+goto u
+elsif (v=0 and s*z>q)or(v=2 and d*z>q)or(v=4 and g*z>q)or(v=6 and h*z>q)or (v=8 and j*z>q) then 
+clear screen
+?@(10,10)"余额不足"
+k$=inkey$
+if k$="keya5" then:z=z-1:goto l:fi
+if k$="keya6" then:z=z+1:goto l:fi
+if k$="keya7" then
+?@*(10,10)"购买成功"
+if v=0 then
+q=q-s*z
+s2=s2+z
+elsif v=2 then
+d2=d2+z
+q=q-d*z
+elsif v=4 then
+g2=g2+z
+q=q-g*z
+elsif v=6 then
+h2=h2+z
+q=q-h*z
+elsif v=8 then
+j2=j2+z
+q=q-j*z
+endif
+y=y+z
+else:goto l
+endif
+goto u
+label i
+clear screen
+?reverse@(12,3)"仓库"
+?@(3,5)"容量:",y,"/",w
+?@(10,6)"盗版vcd:",s2
+?@(10,8)"伪劣化妆品",d2
+?@(10,10)"假手机",g2
+?@(10,12)"上海小宝",h2
+?@(10,14)"轿车",j2
+inkey$
+goto be
+label x
+?@(3,19)"卖出数量:",c
+if (v=0 and s2<c)or(v=2 and d2<c)or(v=4 and g2<c)or(v=6 and h2<c)or(v=8 and j2<c) then 
+clear screen
+?@(10,10)"你拥有的物资不足"
+elsif c<0 then
+?@(10,10)"非法输入"
+k$=inkey$
+if k$="keya5" then:c=c-1:goto x
+elsif k$="keya6" then:c=c+1:goto x
+elsif k$="keya7" then
+clear screen
+?@(10,10)"卖出成功"
+if v=0 then
+q=q+c*s
+s2=s2-c
+elsif v=2 then
+q=q+c*d
+d2=d2-c
+elsif v=4 then
+q=q+c*g
+g2=g2-c
+elsif v=6 then
+q=q+c*h
+h2=h2-c
+elsif v=8 then
+q=q+c*j
+j2=j2-c
+endif
+y=y-c
+else:goto x
+endif
+inkey$
+goto u
+label o
+if q<3e4 then
+clear screen
+?@(2,10)"不够三万块,一边凉快去"
+goto be
+else
+clear screen
+zeng=(q-mod(q,1000))/1000
+?reverse@(12,2)"中介"
+?@(5,10)"这里可以为你扩充你的仓库!"
+?@(5,11)"以便存放更多货物!"
+?@(5,13)"价格:1000元/1点"
+?@(2,4)"仓库:",y,"/",w
+?reverse@(5,15)"交易助手"
+?@(5,16)"可以增加:",zeng,"点"
+endif
+label oo
+?@(5,17)"你需要加多少点:",b
+if b<1 then
+clear screen
+?@(10,10)"非法输入"
+goto be
+endif
+k$=inkey$
+if k$="keya5" then:b=b-1:ggoto oo
+elsif k$="keya6" then:b=b+1:goto oo
+elsif k$="keya7" and b*1e3<=q then
+clear screen
+?@(1,10)"你的库存增加了",b,"点"
+q=q-b*1e3
+w=w+b
+goto be
+elsif k$="keya7 and b*1e3>q then
+clear screen
+?@(10,10)"现金不足!"
+inkey$
+goto t
+endif
+label p
+if r=100 then
+clear screen
+?@(1,10)"你已经很健康了!不需治疗"
+inkey$
+goto t
+else
+clear screen
+?reverse@(5,2)"**人民医院"
+?@(1,11)"这里可以为你增加健康!"
+?@(3,13)"价格:100元/1点"
+?@(10,4)"金钱:",q
+?@(2,4)"健康:",r
+?reverse@(1,7)"注意:健康最多为100"
+endif
+label pp
+?@(2,15)"你需要增加多少健康:",n
+if n*100>q then
+clear screen
+?@(5,10)"医药费不足,滚"
+goto be
+elsif n<1 then
+clear screen
+?@(10,10)"非法输入"
+inkey$
+goto t
+elsif n+r>100 then
+clear screen
+?@(3,10)"你的健康最多为100"
+endif
+k$=inkey$
+if k$="keya5" then:n=n-1:goto pp
+elsif k$$="keya6" then:n=n+1:goto pp
+elsif k$="keya7" then
+r=r+n
+q=q-n*100
+clear screen
+?@(3,10)"你的健康已增加"
+goto be
+else:goto pp
+endif
+label a
+if e=1 and zh>0 and q>zh then
+clear screen
+?@(1,8)"村长:你好像借了我不少钱啊?"
+inkey$
+?@(1,10)"村长(拿出账单):还欠我$",zh
+inkey$
+?@(1,11)"小子想逃,先把贷款还了再说!"
+inkey$
+goto t
+elsif e=1 and zh>0 and q<zh then
+clear screen
+?@(1,10)"半路遇到村长!"
+inkey$
+clear screen
+?@(2,3)"村长:小子,要回家啦!你好像"
+?"借了我不少钱啊?"
+inkey$
+?@(2,5)"村长(拿出帐单):你还欠我"
+?"$",zh," 先还了再说!"
+inkey$
+?@(2,7)"我:我只剩下$",q
+inkey$
+?@(2,9)"村长:什么?没钱还!"
+?"打手,给我打!"
+inkey$
+clear screen
+?@(1,11)"剧终:没钱还债,被村长活活"
+?"打死!"
+inkey$
+clear screen
+print at(1,9)"得分:",q-zh
+?"等级:5级"
+?@(7,12)"无名烂汉"
+inkey$
+end 
+else
+clear screen
+?@(2,6)"你要前往什么地方:"
+?@(2,8)"any key ok"
+?reverse@(3,12)"but 背光键.赌场  " 
+?@(5,16)"温馨提示:不够10000元,千万"
+?"不要去赌场"
+k$=inkey$
+fi
+if k$<>"keya7" then
+clear screen
+?@(10,8)"步行中...."
+inkey$
+?@(10,8)"已经到达! "
+s3=int(ran(20)):d3=int(ran(50)):g3=int(ran(500)):h3=int(ran(1000)):j3=int(ran(2000)):m=int(ran(8)):e=e-1
+if kk=1 then
+zh=int(zh*1.15)
+fi
+elsif k$="keya7" then goto du
+else goto t
+endif
+inkey$
+label ne2
+if e=1 then
+?"该把仓库清空,回老家去了"
+goto be
+elsif e=0 then
+clear screen
+?@(7,8)"得分:",q
+else goto n
+fi
+?@(7,9)"级别:"; 
+if q<1e7 and q>1e5 then
+?"三级"
+?@(10,9)"杰出青年"
+elsif q<1e5 then
+?"四级"
+?"回家的路费都没赚够!"
+inkey$
+?"真对不起乡亲父老!"
+elsif q>1e7 and q<1e9 then 
+?"二级"
+?@(10,9)"成功人士"
+elsif q>1e9 then
+?"一级"
+?@(10,9)"顶级富豪"
+endif
+if q<sec3 then
+?@(1,10)"未能挤入英雄榜,还需努力!"
+elsif q>sec3 then
+?"抱歉,E+E不支持open语句"
+label n
+print at(1,10)"今日新闻:"
+print
+if m=8 then
+?"大家都疯狂地购买车,车顿时供不应求"
+j3=1e5
+elsif m=0 then
+?"听说,上海小宝功效超过伟哥"
+h3=51234
+elsif m=5 then
+?"村姑们都在卖盗版vcd"
+s3=-29+int(ran(3))
+elsif m=6 then
+?"近来天气变坏了,健康下降9,市场也冷淡"
+r=r-9
+elsif m=1 then
+?"大学生都去买手机"
+g3=9121
+elsif m=3 then
+?"我酷我用化妆品"
+d3=1211
+elsif m=4 then
+?"去读书还不如在家看vcd"
+s3=112
+elsif  m=7 then
+?"现代电子科技日新月益,手机价格一降再降"
+g3=-900+int(ran(50))
+elsif m=2 then
+?"化妆品被查出含有致癌物质"
+d3=-60+int(ran(10))
+fi
+restore ji
+read q$,w$,e$,r$,t$
+label ji
+data "今天请朋友吃饭,现金减少5%","邻居说我样衰,扇了我一巴,健康下降10","村长以高价硬卖我两个手机,欠债5000","老板说我欠债太多,找人打了我一顿,抢了些现金当利息"," "
+xy=int(ran(4))
+if xy=0 then
+a$=q$
+q=int(q*0.95)
+elsif xy=1 then
+a$=w$
+r=r-10
+elsif xy=3 then
+a$=e$
+if w-y>=2 then
+y=y+2
+zh=zh+5000
+g2=g2+2
+elsif w-y<2 then
+sd$="可是仓库容量不足!不能存放!"
+fi
+elsif zh>0 and xy=4 then
+a$=r$
+r=r-5
+q=int(q*0.95)
+elsif xy=4 or xy=2 then
+a$=t$
+fi
+print a$
+if xy=3 and w-y<2 then
+print sd$
+fi
+goto be
+label yo
+clear screen
+?reverse@(11,1)"邮局"
+?@(2,3)"欠债:$",zh
+?@(2,4)"现金:",q
+?@(5,10)"这里可以为你邮寄贷款"
+label yoo
+?@(3,6)"需要还多少贷款: ",ji
+k$=inkey$
+if k$="kerya5" then
+ji=ji-1:goto yoo
+elsif k$="keya6" then
+ji=ji+1:goto yoo
+elsif k$="keya7" then
+if ji<1 then
+clear screen
+?@(10,10)"非法输入"
+goto be
+elsif q-ji<0 then
+clear screen
+?@(10,10)"现金不足!"
+goto be
+fi
+if ji<=zh then
+clear screen
+?@(10,10)"邮寄成功!"
+zh=zh-ji
+q=q-ji
+goto be
+elsif ji>zh then
+clear screen
+?@(1,10)"你傻啊,我并没有欠你这么多钱!"
+goto be
+fi
+endif
+label be
+inkey$
+goto t
+label en
+clear screen
+?@(7,9)"[背光].退出"
+?@(5,11)"任意键返回..."
+k$=inkey$
+if k$="keya7" then goto kai
+else goto t
+fi
+label en2
+clear screen
+?@(7,9)"[背光].退出游戏"
+?@(5,11)"任意键返回..."
+i$=inkey$
+if i$="keya7" then
+clear screen
+?@(7,10)"Improved by 9GHz.CPU"
+inkey$
+?@(1,19)
+end
+else goto kai
+fi
+label du
+if e<=2 then
+clear screen
+p?@(1,10)"要回家了,没时间去赌场了!"
+goto be
+fi
+e=e-1
+if kk=1 then
+zh=int(zh*1.15)
+fi
+clear screen
+?@(10,10)"步行中..."
+inkey$
+?@(3,10)"欢迎来到盛世赌场"
+inkey$
+label du2
+clear screen
+?reverse@(10,2)"盛世赌场"
+?@(2,3)"欠债:",zh
+?@(2,4)"现金:",q
+?@(2,5)"健康:",r
+?@(10,7)"[上曲].高利贷"
+?@(10,9)"[背光].开始赌博"
+?@(10,11)"[下曲].离开"
+?@(2,14)"赌场声明:"
+?"1.所有代款要在最后一天前还"
+?"清,否则有你好受的!"
+?"2.代款不能超过100万"
+?"3.所有活动要有1万元以上才"
+?"能进行"
+k$=inkey$
+if val(k$)/val(k$)<>1 then goto du2 fi
+on val(k$)+1 goto du2,gao,wei,t,du2,du2,du2,du2,du2,du2
+label gao
+if q<10000 then
+clear screen
+print at(17,10)"资金不足,不能贷款!"
+inkey$
+goto du2
+fi
+clear screen
+print at(2,6)"村长:小子,是否要借钱(y/n)"
+print at(2,7)"村长:这是高利贷,没钱还,就不要借!"
+print at(2,10)"利率:15%/天"
+print at(30,10)"可以贷款:",1e6-zh
+print at(2,2)"现金:",q
+print at(25,2)"欠债:",zh
+k$=inkey$
+if k$="y" then
+goto ttt
+elsif k$="n" then
+goto du2
+else goto gao
+fi
+label ttt
+input at(3,13)"贷款:",dai
+if dai/1<>int(dai) or dai<1 then
+clear screen
+print at(20,10)"非法输入"
+inkey$
+goto du2
+elsif dai+zh>1000000 then
+ clear screen
+print at(20,10)"欠债不能超过100万"
+inkey$
+goto gao
+else
+q=q+dai
+zh=zh+dai
+kk=1
+clear screen
+print at(20,10)"贷款成功"
+inkey$
+goto du2
+fi
+label wei
+if q<10000 then
+clear screen
+print at(15,10)"村长:不够10000块,不能进去!"
+inkey$
+print at(15,10)"村长:快滚,不然我叫打手来!      "
+inkey$
+goto du2
+fi
+clear screen
+box 80,20 to 230,170
+line 80,40 to 230,40
+line 80,150 to 230,150
+line 100,20 to 100,170
+line 210,20 to 210,170
+line 155,40 to 155,150
+text 125,95,"大"
+text 175,95,"小"
+print at(2,18)"请选择下注方式:"
+print at(20,18)"[1].大            [2].小"
+print at(20,19)"[3].围式            "
+print reverse at(30,19)" [4].离开 "
+print at(2,1)"现金:",q
+print at(2,17)"可下注金额为:",q-3000
+k$=inkey$
+if k$="1" then
+qw$="大"
+elsif k$="2" then
+qw$="小"
+elsif k$="3" then
+qw$="围式"
+elsif k$="4" then
+goto du2
+else
+goto wei
+fi
+input at(10,16)"下注金额:",jin
+if jin/1<>int(jin) or jin<1 then
+clear screen
+print at(20,10)"非法输入"
+inkey$
+goto wei
+elsif q-jin<0 then
+clear screen
+print at(17,10)"现金不足!"
+inkey$
+goto wei
+inkey$
+elsif q-jin<3000 then
+clear screen
+print at(13,10)"要留下3000元作药费"
+inkey$
+goto wei
+else
+q=q-jin
+label xia
+clear screen
+print at(2,2)"现金:",q
+print at(14,8)"你的下下注为:",qw$
+print at(15,10)"下注金额为:",jin
+print reverse at(20,14)"确定/取消(y/n)"
+fi
+t$=inkey$
+if t$="y" then goto kaij
+elsif t$="n" then 
+q=q+jin
+goto wei
+else goto xia 
+fi
+label kaij
+for i=3 to 0 step -1
+pause 1
+print at(20,14)i,"秒后开奖       "
+next
+clear screen
+box 73,77 to 120,130
+box 183,77 to 230,130
+for i=1 to 50
+for p=1 to 100
+next
+op=int(ran(5)+1):op2=int(ran(5)+1)
+print at(17,9)op
+print at(35,9)op2
+next
+er$=" "
+pei$=" "
+kai2=0
+if op=op2 then
+er$="围式"
+pei$="或6"
+kai2=3
+fi
+if op+op2>6 then
+we$="大"
+pei=2
+kai=1
+elsif op+op2<=6 then
+we$="小"
+pei=2
+kai=2
+fi
+print at(2,2)"现金:",q
+pause 1
+print at(8,13)"开奖结果为:",we$," ",er$
+print at(30,13)"赔率为:1赔",pei,pei$
+if (k$="1" and kai=1) or (k$="2" and kai=2) then
+print at(20,15)"获得金钱:",jin*2
+q=q+jin*2
+elsif k$="3" and kai2=3 then
+print at(20,15)"获得金钱:",jin*6
+q=q+jin*6
+else
+print at(20,15)"真没运气!"
+fi
+pause 1
+print at(2,2)"现金:",q,"       " 
+print at(17,17)"按任意键继续..."
+inkey$
+goto wei
+label bang
+clear screen
+print reverse at(20,2)"排行榜"
+print at(8,8)"第一名","     ",name$
+print at(8,10)"第二名","     ",name2$
+print at(8,12)"第三名","     ",name3$
+print at(20,6)"姓名"
+print at(33,6)"记录"
+print at(30,8)sec
+print at(30,10)sec2
+print at(30,12)sec3
+inkey$
+goto kai
+label zai
+if len(try$)=999 then
+clear screen
+print at(20,10)"无存档"
+inkey$
+goto kai
+fi
+open 2,"save.dat","r"
+clear screen
+print at(20,10)"存档载入中..."
+input #2 q,y,w,e,zh,r,s3,d3,g3,h3,j3,s2,d2,g2,h2,j2,kk
+close 2
+goto t
+label bao
+open 2,"save.dat","w"
+clear screen
+print at(20,10)"正在处理数据..."
+print #2 q,y,w,e,zh,r,s3,d3,g3,h3,j3,s2,d2,g2,h2,j2,kk
+print at(20,10)"保存成功!       "
+close 2
+try$="1"
+goto be

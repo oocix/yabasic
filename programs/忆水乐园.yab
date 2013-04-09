@@ -1,0 +1,375 @@
+N$="乐园名称 -|4字以内"
+pn$="忆水乐园"
+
+N$="管理者名称 -|3字以内"
+an$="漠鱼"
+
+
+N$="以下内容请勿擅自修改"
+
+
+
+N$="Code Begin.!"
+N$="By Moyo Of YisNet"
+
+FOR F=0 TO 159 STEP 1.59
+BOX 0+F,O+F TO 159-F,239-F
+NEXT
+FOR F1=0 TO 37
+F2=RAN(159)
+F3=RAN(79)
+LINE 0+F2,80+F3 TO 0+F2,159-F3
+NEXT
+?@(8,10)" 忆水乐园 "
+?@(8,12)" Alpha 1.0 "
+inkey$
+
+clear screen
+circle 7,13,7
+circle 152,13,7
+circle 7,228,7
+circle 152,228,7
+box 10,8 to 149,18
+box 15,18 to 144,223
+box 18,21 to 141,220
+box 10,223 to 149,233
+
+dim s$(9)
+data "-=[ 游戏公告 ]=-","","+--   -- --   --+","健康游戏,抵制盗版","适度娱乐,防止沉迷","洁身自好,勿信他人","+--   -- --   --+","","Any Key To Enter"
+for r=1 to 9
+read s$(r)
+next
+y=20
+for i=1 to 9
+y=y+20
+x=80-int((len(s$(i))*3))
+text x,y,s$(i)
+next
+inkey$
+
+dim hp$(20)
+dim mm$(4)
+data " 新的游戏 "," 读取进度 "," 游戏帮助 "," 退出游戏 "
+for r=1 to 4
+read mm$(r)
+next
+dim gt(3)
+dim gt$(3)
+data "男性","女性","儿童"
+for r=1 to 3
+read gt$(r)
+next
+dim wk(4)
+dim wk$(5)
+data "安检员","维修工","保洁员","演员","返回上菜单"
+for r=1 to 5
+read wk$(r)
+next
+dim wkh$(5)
+data "每月:300$","每月:500$","每月:300$","每月:600$",""
+for r=1 to 5
+read wkh$(r)
+next
+dim gm$(3)
+data "乐园信息","乐园操作","任务信息"
+for r=1 to 3
+read gm$(r)
+next
+dim pem$(6)
+data "设施操作","员工操作","土地操作","广告宣传","资金操作","保存退出"
+for r=1 to 6
+read pem$(r)
+next
+dim bc$(5)
+data "惊险游乐设施","儿童游乐设施","休闲游乐设施","水上游乐设施","其它设施"
+for r=1 to 5
+read bc$(r)
+next
+dim bn(15)
+dim bn$(15)
+data "九龙船","弹射椅","旋转凤凰","碰碰车","糖果飞车","蹦蹦床","观光塔","音乐广场","电影院","游乐船","迷你潜艇","水底世界","面包店","饮料店","大型花园"
+for r=1 to 15
+read bn$(r)
+next
+dim bp(15)
+data 10,20,10,10,20,10,30,20,20,10,10,10,10,20,50
+for r=1 to 15
+read bp(r)
+next
+dim ba(15)
+data 50,20,10,30,10,70,70,20,50,70,60,50,10,20,50
+for r=1 to 15
+read ba(r)
+next
+kg8$="        "
+cn=1
+goto mmenu
+label initial
+money=3000
+area=3600
+uarea=0
+year=1990:month=5:day=13
+gt(1)=30:gt(2)=30:gt(3)=40
+wk(1)=1:wk(2)=2:wk(3)=3:wk(4)=2
+sta$="暂无任何状况"
+gmc=1
+pemc=1
+chn=1
+stp=0
+return
+
+label mmenu:clear screen
+?@(2,3)"忆水乐园  Alpha 1.0"
+?@(3,18)"-+ -+- -+- +-"
+?@(1,19)"Copyright (C) Moyo,YisNet"
+for p=1 to 4
+?@(7,4+p*2)mm$(p)
+next
+label mmc
+?reverse@(7,4+cn*2)mm$(cn)
+k$=inkey$
+if k$="keya5" and cn>1 then
+?@(7,4+cn*2)mm$(cn)
+cn=cn-1
+elsif k$="keya6" and cn<4 then
+?@(7,4+cn*2)mm$(cn)
+cn=cn+1
+elsif k$="keya7" then
+on cn goto newg,loadg,helper,exitg
+fi
+goto mmc
+label exitg
+?@(1,19)
+end
+label helper:clear screen
+?@(5,10)"Searching..."
+inkey$
+goto mmenu
+label loadg:clear screen
+?@(1,10)"Sorry"
+?"This basic can't use 'Open'"
+inkey$
+goto mmenu
+label newg:clear screen
+?@(1,2)"欢迎来到."
+?@(3,4)an$," 的[",pn$,"]"
+?@(5,10)"乐园初始化中..."
+?@(3,15)"请稍等..."
+?@(5,19)"Wish you happy!"
+gosub initial
+?@(5,17)"|":?@(22,17)"|"
+for i=0 to 7
+pause 1
+?reverse@(6+i*2,17)"  "
+next
+label maing:clear screen
+gosub head
+gosub sta
+for i=0 to 2
+text 1+i*50,29,gm$(i+1)
+next
+label gmc
+gosub pc
+text 1+(gmc-1)*50,29,kg8$
+text 1+(gmc-1)*50,32,gm$(gmc)
+box -1,45 to 160,210
+on gmc gosub pinfo,pedit,tinfo
+label gmcErr
+k$=inkey$ 
+if k$="keya5" and gmc>1 then
+text 1+(gmc-1)*50,32,kg8$
+text 1+(gmc-1)*50,29,gm$(gmc)
+gmc=gmc-1
+goto gmc
+elsif k$="keya6" and gmc<3 then
+text 1+(gmc-1)*50,32,kg8$
+text 1+(gmc-1)*50,29,gm$(gmc)
+gmc=gmc+1
+goto gmc
+elsif k$="keya7" and gmc=2 then
+goto predit
+else goto gmcErr
+fi
+label pc
+stp=stp+1
+if stp>=5 then
+stp=0:day=day+1
+if day>30 then:day=1
+month=month+1
+if month>12 then:month=1
+year=year+1
+fi:fi
+gosub eve
+gosub head
+fi
+return
+label eve
+money=money+3000
+i=int(ran(3))+1
+gt(i)=gt(i)+300
+return
+label head
+if money<0 then
+s$="破产啦.!"
+gosub mess
+fi
+box -1,-1 to 160,25
+?@(1,1)"[ ",year,"年",month,"月",day,"日 ] 营业中"
+?@(2,2)"资金:",money,",游客:",gt(1)+gt(2)+gt(3),"人"
+return
+label sta
+box -1,210 to 160,240
+?@(1,19)sta$
+return
+label pinfo
+?@(2,5)"×空间使用:",uarea,"/",area,"平米"
+?@(2,6)"≥游客:",gt(1)+gt(2)+gt(3),"人"
+for i=1 to 3
+?@(2,6+i)gt$(i),":",gt(i),"人"
+next
+?@(2,10)"≥员工:",wk(1)+wk(2)+wk(3)+wk(4),"人"
+for i=1 to 4
+?@(2,10+i)wk$(i),":",wk(i),"人"
+next
+return
+label pedit
+for i=1 to 6
+?@(2,4+i)pem$(i)
+next
+return
+label predit
+box -1,45 to 160,210
+for i=1 to 6
+?@(4,4+i)pem$(i)
+hp$(i)=""
+next
+chs=6:gosub ch
+if chn=0 then:goto maing:fi
+on chn goto be,we,ae,ac,me,mmenu
+label be
+box -1,45 to 160,210
+for i=1 to 5
+?@(4,4+i)bc$(i)
+hp$(i)=""
+next
+chs=5:gosub ch
+if chn=0 then:goto predit:fi
+ch2=chn
+label be2
+box -1,45 to 160,210
+tmp=0
+for i=(chn-1)*3+1 to chn*3
+tmp=tmp+1
+?@(4,4+tmp)bn$(i),":",bn(i)
+hp$(tmp)="价钱:"+str$(bp(i))+",占地:"+str$(ba(i))
+next
+chs=3:gosub ch
+if chn=0 then:goto be:fi
+ques$="购买还是卖出?"
+q1$="购买":q2$="卖出"
+gosub ques
+bnn=(chn2-1)*3+chn
+if ans=1 then
+bn(bnn)=bn(bnn)+1
+else
+bn(bnn)=bn(bnn)-1
+fi
+goto be2
+label we
+box -1,45 to 160,210
+for i=1 to 4
+?@(4,4+i)wk$(i),":",wk(i),"人"
+hp$(i)=wkh$(i)
+next
+chs=4:gosub ch
+if chn=0 then
+goto predit
+fi
+ques$="请选择操作."
+q1$="雇佣":q2$="解雇"
+gosub ques
+if ans=1 then
+wk(chn)=wk(chn)+1
+else wk(chn)=wk(chn)-1
+fi
+if wk(chn)<0 then:wk(chn)=0:fi
+goto we
+label ae
+?@(2,5)"ae"
+goto predit
+label ac
+?@(2,5)"ac"
+goto predit
+label me
+?@(2,5)"me"
+goto predit
+label tinfo
+?@(2,5)"见习生";
+tm=5000:tg=500:gosub tc
+?@(2,6)"M:5000,G:500"
+?@(2,7)"小老板";
+tm=9000:tg=700:gosub tc
+?@(2,8)"M:9000,G:700"
+?@(2,9)"企业家";
+tm=15000:tg=1200:gosub tc
+?@(2,10)"M:15000,G:1200"
+?@(2,11)"小富翁";
+tm=23000:tg=3000:gosub tc
+?@(2,12)"M:23000,G:3000"
+?@(2,13)"乐圆大亨";
+tm=50000:tg=5000:gosub tc
+?@(2,14)"M:50000,G:5000"
+return
+label tc
+if money>=tm and gt(1)+gt(2)+gt(3)>=tg then
+?"(已达到)"
+else ?"(未达到)"
+fi
+return
+label ch
+if chn>chs or chn=0 then:chn=1:fi
+label chc
+?@(2,4+chn)"≥"
+box -1,210 to 160,240
+?@(1,19)hp$(chn)
+k$=inkey$
+if k$="keya5" and chn>1 then
+?@(2,4+chn)"  "
+chn=chn-1:goto chc
+elsif k$="keya6" and chn<chs then
+?@(2,4+chn)"  "
+chn=chn+1:goto chc
+elsif k$="keya7" then
+return
+elsif k$="keya4" then
+chn=0:return
+else goto chc
+fi
+label ques
+box -1,80 to 50,90
+box -1,90 to 160,170
+box 110,170 to 160,180
+line 50,85 to 160,85
+line -1,175 to 110,175
+?@(2,9)ques$
+?@(5,11)q1$
+?@(15,11)q2$
+ans=1:?@(2,11)"≥"
+label quesc
+k$=inkey$
+if k$="keya5" then
+?@(2,11)"≥":?@(12,11)"  ":ans=1
+elsif k$="keya6" then
+?@(12,11)"≥":?@(2,11)"  ":ans=0
+elsif k$="keya7" then
+return
+fi
+goto quesc
+label mess
+box -1,80 to 50,90
+box -1,90 to 160,170
+box 110,170 to 160,180
+line 50,85 to 160,85
+line -1,175 to 110,175
+?@(2,9)s
+return

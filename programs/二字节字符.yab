@@ -1,0 +1,56 @@
+label main
+clear screen
+?reverse@(2,2)"二字节字符"
+s$=chr$(172)+chr$(223)
+?@(1,5)s$,"排列时,按上下曲选择上下页":?"按背光返回"
+?@(2,8)"X与Y分别表示组成字符的两个AscII码"
+?@(1,19)"Made:Love_you189 -Imp:Moyu"
+?@(6,12)"排列特殊字符"
+?@(6,14)"排列特殊汉字"
+?@(6,16)"退出"
+label co
+?@(3,12+mov)s$
+k$=inkey$
+if k$="keya5" and mov>0 then
+mov=mov-2
+?@(3,14+mov)"  "
+elsif k$="keya6" and mov<4 then
+mov=mov+2
+?@(3,10+mov)"  "
+elsif k$="keya7" then
+goto bg
+fi
+goto co
+label bg
+x=129:y=252:c=1:ye=1:yp=1
+if mov=0 then
+a=32:b=63
+elsif mov=2 then
+a=64:b=252
+elsif mov=4 then
+?@(1,19):end:fi
+clear screen
+label lo
+for i=x to y step c
+for u=a to b step c
+if i=145 and u=62 or i=145 and u=63 then u=64
+fi
+d$=chr$(i)+chr$(u)
+?"  [",d$,"]  X: ",i," - Y: ",u
+s=s+1
+if s=18 then
+?@(2,19)s$,"页面:",ye
+ye=ye+yp
+label coo
+	k$=inkey$
+	if k$="keya7" then:s=0:goto main
+	elsif k$="keya5" and ye>1 then
+		t=x:y=x:y=t:t=a:b=a:a=t:c=-1:yp=-1:s=0:clear screen:goto lo
+	elsif k$<>"keya6" then
+		goto coo
+	fi
+next
+next
+?@(9,19)"已完毕.!":inkey$
+s=0
+goto main

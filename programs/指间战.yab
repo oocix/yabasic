@@ -1,0 +1,558 @@
+open window 160,240
+clear screen
+goto load
+label initial
+name$="Moyo"
+mSpeed=1
+CBSpeed=6
+level=1
+vic=10
+ast=1
+des=15
+ksmax=10:ksmin=6
+aks=7:dfs=3
+setaks=7:setdfs=3
+mmr=1
+wins=0:fails=0
+expa=0:expb=1000
+if dimed=0 then
+dimed=1
+dim m$(4)
+data "接入网络","战斗说明","开发团队","关机"
+for r=1 to 4
+read m$(r)
+next
+dim m2$(4)
+data "开始轰杀","个人信息","任务接入","断开连接"
+for r=1 to 4
+read m2$(r)
+next
+dim m3$(4)
+data "攻击","防御","设置","撤离"
+for r=1 to 4
+read m3$(r)
+next
+dim level$(7)
+data "数据流","攻击子点","数据波","小循环","大循环","攻击源点","无限循环"
+for r=1 to 7
+read level$(r)
+next
+dim level2$(7)
+data "菜鸟","小黑客","准黑客","成名高手","网络高手","超级黑客","网络之神"
+for r=1 to 7
+read level2$(r)
+next
+dim task$(19)
+data "校盟","木马帝国","华夏黑客联盟","黑鹰","黑客基地","红盟","锋芒组","自由基地","HK联盟","蚂蚁王朝","火狐团","雪花组","死亡军团","大屠杀2000","邪恶十进制","古黑论","逍遥域","一线天","忆水网络"
+for r=1 to 19
+read task$(r)
+next
+dim cny$(8)
+data "中国","美国","日本","英国","法国","俄国","韩国","土尔其"
+for r=1 to 8
+read cny$(r)
+next
+endif
+return
+label up2data
+expb=level*300+200
+des=level*5+ksmax*1
+mmr=int((des+ast)/ksmax)
+if vic<=0 then
+gosub mess
+?@(3,9)"唉..."
+?@(3,10)"我佛慈悲,看你可怜"
+?@(3,11)"就借你10台肉鸡吧.!":vic=10
+inkey$
+run=1:goto battle
+endif
+if aks>ksmax or dfs>ksmax then
+aks=0:dfs=0
+endif
+return
+label battleup2data
+emymmr=int(emydes/emys)
+mmr=int((des+ast)/(aks+dfs))
+return
+label load
+for i=1 to 120
+line 0,i to 160,i
+line 0,240-i to 160,240-i
+next
+for i=1 to 60 step 6
+circle 80,120,i
+next
+text 60,110,"指间战"
+text 33,126,"Any key to Enter"
+gosub initial
+inkey$
+pm=1:pm2=1:pm3=1
+point$=chr$(172)+chr$(223)
+label menu
+mx=7:my=6:mi=2
+box 2,2 to 157,27
+?@(3,2)"指间战 Alpha 1.0"
+box 2,213 to 157,237
+?@(3,19)"(C) 忆水网络"
+ws=23
+label pmenu
+gosub clearbox
+for i=1 to 4
+?@(mx,(i-1)*mi+my)m$(i)
+next
+label mchoice
+pmy=(pm-1)*mi+my
+?@(mx-3,pmy)point$
+pm$=m$(pm)
+gosub pmstr
+k$=inkey$
+?@(mx-3,pmy)"  "
+if k$="keya5" then
+pm=pm-1
+elsif k$="keya6" then
+pm=pm+1
+elsif k$="keya7" then
+on pm goto game,help,author,exits
+endif
+if pm>4 then pm=1:endif
+if pm<1 then pm=4:endif
+goto mchoice
+label help
+gosub clearbox
+?@(5,6)"太占空间"
+?@(8,7)"SO.."
+?@(5,8)"自己摸索"
+inkey$
+goto pmenu
+label exits
+?@(1,19)
+end
+label author
+gosub clearbox
+?@(3,5)"开发设计:"
+?@(6,7)"Moyo"
+inkey$
+goto pmenu
+label game:clear screen
+gosub dsphead
+gosub dspbottom
+box 2,30 to 157,210
+gosub mess
+?@(3,9)"数据绕指间,轰杀一切.!"
+inkey$
+label reloadgame
+clear screen
+gosub up2data
+gosub dsphead
+gosub dspbottom
+ws=12:mSpeed=1
+mx=7:my=6:mi=2
+label main
+gosub clearbox
+for i=1 to 4
+?@(mx,(i-1)*mi+my)m2$(i)
+next
+label m2choice
+pmy=(pm2-1)*mi+my
+?@(mx-3,pmy)point$
+pm$=m2$(pm2)
+gosub pmstr
+k$=inkey$
+?@(mx-3,pmy)"  "
+if k$="keya5" then
+pm2=pm2-1
+elsif k$="keya6" then
+pm2=pm2+1
+elsif k$="keya7" then
+on pm2 goto attack,pinfo,task,menu
+endif
+if pm2>4 then pm2=1:endif
+if pm2<1 then pm2=4:endif
+goto m2choice
+label attack
+if hastsk=1 then
+gosub mess
+?@(3,9)"目标:"
+?@(6,10)"[",task$(tsk+1),"]"
+?@(4,12)"轰杀.!!!"
+inkey$
+else
+gosub mess
+addr$=cny$(int(ran(8))+1)+">>"+chr$(int(ran(26))+65)+"-"+chr$(int(ran(10))+48)+chr$(int(ran(10))+48)+"服务器"
+?@(3,9)"时间:",right$(date$,4),"-",mid$(date$,3,len(date$)-7)
+?@(3,10)"地点:",addr$,"";
+?@(3,12)"执行轰杀.!!!"
+inkey$
+endif
+label battleinitial
+clear screen
+if hastsk=1 then
+addr$="服务器>>"+task$(tsk+1)
+endif
+emys=int(ran(level*hastsk))+int(ran(level*3))+3
+emydes=int(ran(level*hastsk))+int(ran(des))+7
+emymmr=int(emydes/emys)
+mx=23:my=16:mi=1
+mSpeed=30:ws=16
+safe=100
+gosub btehead
+gosub btebottom
+label battle
+gosub battleup2data
+if aks+dfs<=ksmin then
+aks=setaks
+dfs=setdfs
+gosub btebottom
+endif
+box 2,40 to 157,210
+gosub dspme
+gosub dspemy
+for i=1 to 4
+?@(mx,(i-1)*mi+my)m3$(i)
+next
+label m3choice
+pmy=(pm3-1)*mi+my
+?@(mx-2,pmy)point$
+pm$=m3$(pm3)
+gosub pmstr
+k$=inkey$
+?@(mx-2,pmy)"  "
+if k$="keya5" then
+pm3=pm3-1
+elsif k$="keya6" then
+pm3=pm3+1
+elsif k$="keya3" then
+end
+elsif k$="keya7" then
+on pm3 goto ak,df,set,run
+endif
+if pm3>4 then pm3=1:endif
+if pm3<1 then pm3=4:endif
+goto m3choice
+label ckstates
+if (dfs<0 and vic<0)or(des<0)or(run=1) then
+run=0
+gosub mess
+?@(3,9)"行动失败.!!"
+fails=fails+1
+gosub up2data
+inkey$
+goto reloadgame
+endif
+if emydes<0 or emys<0 or safe<0 then
+gosub mess
+?@(3,9)"轰杀完成.!!"
+if hastsk=1 then
+tsk=tsk+1
+hastsk=0
+endif
+wins=wins+1
+pause 1
+getvic=int(ran(3*level))+3+hastsk*tsk*2
+getksmax=int(ran(9))
+if getksmax=5 then
+getksmax=1
+else getksmax=0
+endif
+getdes=int(ran(5))
+getast=int(ran(3))
+getexp=level*emys+hastsk*tsk*100+int(ran(120))
+gosub mess
+?@(3,9)"获得"
+?@(3,10)"肉鸡:",getvic
+?@(3,11)"经验:",getexp
+vic=vic+getvic
+ksmax=ksmax+getksmax
+ksmin=ksmin+getksmax
+des=des+getdes
+ast=ast+getast
+expa=expa+getexp
+if expa>=expb then
+level=level+1
+expa=expb-expa
+gosub mess
+?@(3,10)"晋级:[",level2$(level),"].!!"
+endif
+gosub up2data
+inkey$
+goto reloadgame
+endif
+return
+label ak
+if aks>70 then
+akl=7
+else akl=int(aks/10)
+endif
+for i=1 to 50 step 5
+for i2=0 to akl
+circle 30+int(ran(10))+i*2,-30+int(ran(10))+210-i*2,int(ran(5))+1
+next
+next
+effaks=int(ran(aks-7))+7
+if mmr*effaks>hastsk*tsk+emymmr then
+emys=emys-1
+emydes=emydes-(mmr*effaks+hastsk*tsk)/7
+if mmr<=emymmr then
+aks=0
+else
+aks=int(mmr-emymmr)
+endif
+if (mmr*effaks-hastsk*tsk+emymmr)>0 then
+safe=safe-1
+endif
+else
+gosub mess
+?@(3,9)name$
+?@(3,10)"攻击丢失.!"
+pause 1
+endif
+gosub mess
+?@(3,9)name$
+?@(3,10)"攻击完成.!"
+gosub btehead
+pause 1
+gosub ckstates
+gosub cpai
+goto battle
+label df
+dfs=dfs+aks
+gosub mess
+?@(3,9)name$
+?@(3,10)"紧急防御.!!"
+pause 1
+gosub cpai
+dfs=dfs-aks
+goto battle
+label set
+gosub mess
+?@(6,9)"攻击点:",setaks
+?@(6,10)"防御线:",setdfs
+?@(6,11)"保存退出"
+label setchoice
+?@(3,9+setindex)point$
+k$=inkey$
+?@(3,9+setindex)"  "
+if k$="keya5" then
+setindex=setindex-1
+elsif k$="keya6" then
+setindex=setindex+1
+elsif k$="keya7" then
+if setindex=0 or setindex=1 then
+?@(6,11)"总数据流:",ksmax
+if setindex=0 then
+setnum=setaks
+setmax=ksmax-setdfs
+else
+setnum=setdfs
+setmax=ksmax-setaks
+fi
+?@(3,9+setindex)"IN"
+label setloop
+?@(13,9+setindex)setnum," "
+k$=inkey$
+if k$="keya5" and setnum>0 then
+setnum=setnum-1
+elsif k$="keya6" and setnum<setmax then
+setnum=setnum+1
+elsif k$="keya7" then
+if setindex=0 then
+setaks=setnum
+setdfs=ksmax-setaks
+else
+setdfs=setnum
+setaks=ksmax-setdfs
+fi
+goto set
+fi
+goto setloop
+else
+gosub btebottom
+goto battle
+fi
+endif
+if setindex<0 then
+setindex=2:endif
+if setindex>2 then
+setindex=0:endif
+goto setchoice
+label run
+if emys>10 or emydes-des>20 then
+gosub mess
+?@(3,9)"危险状态,无法撤离.!!!"
+else run=1
+goto battle
+endif
+inkey$
+goto battle
+label dspme
+if dfs>30 then
+pdfs=30:sdfs=-3
+else
+pdfs=dfs
+sdfs=-dfs/10
+endif
+if dfs<=0 then
+pdfs=3:sdfs=-1
+endif
+for i=pdfs to 0 step sdfs
+circle int(ran(7))+10+pdfs,int(ran(7))+200-pdfs,i+3
+next
+if pdfs>30 then
+paksr=90
+spaksr=9
+else
+paksr=pdfs*3
+spaksr=paksr/10
+endif
+if paksr<=0 then
+paksr=10
+spaksr=1
+endif
+for i=0 to paksr step spaksr
+circle i*(90/paksr)+20,210-sqr(paksr^2-(i*(90/paksr))^2),int(ran(3))+2
+next
+return
+label dspemy
+circle 130,80,18
+circle 130,80,13
+circle 130,80,5
+return
+label btehead
+box 2,-1 to 157,37
+?@(2,1)"->",addr$
+?@(2,2)"安全:",int(safe),"%"
+?@(2,3)"[",emys,"]本源点,总破坏力:",int(emydes),"W";
+return
+label btebottom
+box 2,213 to 157,240
+?@(2,19)name$," |防线:",dfs,"";
+if dfs<=1 then
+?".危险"
+endif
+?@(2,20)"肉鸡:",vic,",破坏力:",int(des+ast),"W";
+return
+label cpai
+gosub btehead
+gosub btebottom
+box 2,40 to 157,210
+gosub dspme
+gosub dspemy
+gosub mess
+?@(3,9)addr$
+?@(3,10)"反击中..."
+pause 1
+effaks=int(ran(emys-7))+7
+if emymmr*effaks>mmr then
+dfs=dfs-1
+des=des-(emymmr*effaks)/9
+if dfs<0 then
+dfs=0
+vic=vic-1
+endif
+else
+gosub mess
+?@(3,9)addr$
+?@(3,10)"反击丢失.!"
+pause 1
+endif
+gosub mess
+?@(3,9)addr$
+?@(3,10)"反击完成.!"
+gosub btebottom
+pause 1
+gosub ckstates
+return
+label task
+if hastsk=0 then
+gosub mess
+?@(3,9)"任务目标:"
+?@(7,10)"[",task$(tsk+1),"]"
+?@(3,11)"是否接领?"
+?@(7,12)" 是    否"
+label tskchoice
+?@(5+tskindex*6,12)point$
+k$=inkey$
+if k$="keya5" then
+?@(11,12)"  "
+tskindex=0
+elsif k$="keya6" then
+?@(5,12)"  "
+tskindex=1
+elsif k$="keya7" then
+if tskindex=1 then
+goto main
+else
+hastsk=1
+gosub dspbottom
+goto main
+fi
+endif
+goto tskchoice
+else
+goto attack
+endif
+label pinfo
+gosub up2data
+gosub clearbox
+?@(2,4)"网者:",name$,"";
+?"(",level2$(level),")"
+?@(2,5)"战斗力:",level,"星"
+?@(2,6)"肉鸡数:",vic
+?@(2,7)"破坏力:",des,"+",ast,"(辅助代码)W"
+?@(2,8)"单体破坏力:",mmr,"W"
+?@(2,9)"数据条数:[饱和",ksmax,"/底数",ksmin,"]"
+?@(2,10)"数据分配:",setaks,"攻",setdfs,"守"
+?@(2,11)"攻击模式:",level$(level)
+?@(2,12)"完成任务数:",tsk
+?@(2,13)"经验值:",expa,"/",expb
+?@(2,15)"战绩:",wins,"胜",fails,"败"
+inkey$
+goto main
+label dsphead
+box 2,2 to 157,27
+?@(2,2)name$," | 破坏力:[",des+ast,"W]"
+return
+label dspbottom
+box 2,213 to 157,237
+if hastsk<>0 then
+?@(2,19)"轰杀目标:",task$(tsk+1)
+else
+?@(2,19)"当前无任务"
+endif
+return
+label mess
+circle 2,83,7
+circle 2,157,7
+circle 157,83,7
+circle 157,157,7
+line 15,83 to 144,83
+circle 15,83,3
+circle 144,83,3
+line 15,157 to 144,157
+circle 15,157,3
+circle 144,157,3
+for i=0 to 30 step mSpeed
+box 8,118-i to 151,122+i
+next
+return
+label pmstr
+for w=1 to ws
+for fs=1 to len(pm$)
+rnd=int(ran(3))
+if rnd=0 then
+fs$=fs$+"0"
+elsif rnd=1 then
+fs$=fs$+"1"
+else fs$=fs$+" "
+endif
+next
+?@(mx,pmy)fs$
+fs$=""
+next
+?@(mx,pmy)pm$
+return
+label clearbox
+for i=0 to 150 step CBSpeed
+box 2,30 to 7+i,210
+next
+return

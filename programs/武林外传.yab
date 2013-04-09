@@ -1,0 +1,305 @@
+e=0:p=0:qg=30:r=0:q=1000:n=2007:y=1:ri=1:wg=10:yd=8
+FOR F=0 TO 159 STEP 1.59:BOX 0+F,O+F TO 159-F,239-F:NEXT:FOR F1=0 TO 57:F2=RAN(159):F3=RAN(79):LINE 0+F2,80+F3 TO 0+F2,159-F3:NEXT:FOR F4=1 TO 10:PRINT AT(F4,10)"武林":PRINT AT(F4-1,10)" ":PRINT AT(24-F4,10)"外传":PRINT AT(28-F4,10)" ":FOR F5=0 to 57:NEXT:NEXT:PRINT AT(9,12)" For E+E "
+inkey$
+clear screen
+print"嗨,朋友,好久不见"
+inkey$
+print"嗨,朋友,如果是你请打招呼"
+inkey$
+print"最近你在哪里"
+inkey$ 
+print"江湖"
+inkey$
+print"江湖?"
+print"我指给你看..."
+inkey$
+label a
+clear screen
+gosub qiangdao
+label qangdao
+if (i=1) or (i=2) then
+print at(3,7)"强盗来了"
+print at(5,12)"<上曲键>.花钱打发"
+print at(5,15)"<下曲键>.老白上"
+else goto b
+endif
+c$=inkey$
+if c$="keya5" then
+r=r-500:q=q-500
+elsif c$="keya6" then
+clear screen
+print"佟湘玉:老白,来强盗了!!!"
+if i=1 then
+w=2
+elsif i=2 then
+w=20
+endif  
+inkey$ 
+print"老白:看我的...葵花点穴手!!"
+inkey$
+if wg>=w then
+print"丫的,欺负到贼祖头上来了"
+p=p+2
+elsif wg<w then
+print"啊指头折了...好汉想要什么"
+print"尽管挑"
+r=r-600:p=p+5:q=q-600
+endif
+else goto qangdao 
+endif
+inkey$
+label b
+clear screen
+if e>=50 then
+print"伙计们:掌柜的,我们饿,不能"
+print"结账了"
+r=r-j:q=q-j
+inkey$
+clear screen
+elsif p>=50 then
+print"掌柜的我们困,不能结账了"
+r=r-j:q=q-j
+inkey$
+clear screen
+endif
+if (q<=0) or (e>=100) or (p>=100) then
+clear screen
+print"不干了,折磨人简直是"
+inkey$
+print"同福客栈因经营不善而倒闭..."
+inkey$
+goto e
+endif
+print at(1,1)"同福客栈"
+print at(3,3)"总账:",q,"钱"
+print at(3,4)"本月收入:",r
+print at(3,18)"秀才郭芙蓉情感指数:",qg
+print at(3,19)"老白武功:",wg
+if ri=31 then
+ri=1:y=y+1
+elsif ri=30 then
+clear screen
+print"月中评价"
+if r<=0 then
+print"月度最窝囊客栈"
+print"发扶恤金50"
+q=q+50
+elsif (r>0) and (r<=500) then
+print"马马虎虎"
+print"发鼓励基金100"
+q=q+100
+else print"七侠金掌柜"
+print"发鼓励基金500"
+q=q+500
+endif
+r=0:ri=ri+1
+inkey$
+clear screen
+goto a
+elsif y=13 then
+y=1:n=n+1:ri=1
+endif
+print at(3,2)n,"年",y,"月",ri,"日"
+print at(1,6)"上下曲键选择,背光键确认."
+print at(5,8)"接待客人"
+print at(5,9)"吃饭吃饭"
+print at(5,10)"搞好关系"
+print at(5,11)"睡觉睡觉"
+print at(5,12)"举办大赛"
+print at(5,13)"训练老白"
+print at(5,14)"关门大吉"
+print at(3,16)"饥饿:",e
+print at(3,17)"疲劳:",p
+label yd
+print at(3,yd-1)"  "
+print at(3,yd)"=>"
+print at(3,yd+1)"  "
+a$=inkey$
+if a$="keya6" and(not(yd>13)) then
+yd=yd+1
+goto yd
+elsif a$="keya5" and(not(yd<9)) then
+yd=yd-1
+goto yd
+elsif a$="keya7" then
+goto pd
+else:goto yd
+endif
+label pd
+ri=ri+1
+if yd=14 then
+clear screen
+print"什么破地方!店开不成了,我"
+print"宣布:破产!!!!!!!"
+inkey$
+print"老邢:怎么了?为什么要倒闭"
+print"捏?有事报告官府,有娄知县."
+print"....派我主持公道!!!哎,先"
+print"别走,这个月的税还没交咧!"
+inkey$
+goto e
+elsif yd=9 then
+clear screen
+print"佟湘玉:吃饭喽...."
+inkey$
+print"莫小贝:才吃饭哪,饿死了"
+inkey$
+print"白展堂:没让你吃屎就不错了"
+inkey$
+print"莫小贝:嫂子.....!!"
+inkey$
+print"佟湘玉:吃饭吃饭"
+e=0
+inkey$
+elsif yd=12 then
+clear screen
+goto dasai
+elsif yd=11 then
+clear screen
+print"佟湘玉:收工,睡觉"
+inkey$
+print"吕秀才:大嘴..,大嘴..你洗"
+print"脚了吗,就睡"
+inkey$
+print"李大嘴:呼....噜噜....呼"
+inkey$
+p=0
+elsif yd=12 then
+clear screen
+goto dasai
+elsif yd=10 then
+clear screen
+gosub qiangdao
+if i<=2 then
+print"秀才:小郭,这朵花送给你"
+inkey$
+print"真的是给我的吗?........"
+print"....怎么没有花瓣?"
+inkey$
+print"让驴吃了........"
+qg=qg+1
+elsif (i>2) and (i<=5) then
+print"秀才:这根萝卜送给你,芙妹"
+inkey$
+print"好香的萝卜!!!"
+qg=qg+2:q=q-20:r=r-20
+else print"秀才:芙妹,给你零花钱"
+inkey$
+print"才三文??算了,将就着花吧"
+qg=qg+3:q=q-30:r=r-30
+endif
+inkey$
+elsif yd=8 then 
+gosub suiji
+clear screen
+print at(3,5)name$,"来了"
+inkey$
+print at(1,8)"请问",name$,"您要点什么?"
+inkey$
+print at(2,10)cai$
+inkey$
+print at(1,12)"好喽,",cai$
+print"这就给您做去"
+inkey$
+print at(1,15)name$,":不错,大嘴手艺越来"
+print"越好了..!给你",j,"钱.!"
+inkey$
+print at(1,18)"啊哈,谢谢您嘞,您走好.."
+print at(1,19)"别掉沟里了..!"
+inkey$
+q=q+j:r=r+j:p=p+2:e=e+2
+elsif yd=13 then
+clear screen
+print"老白:没有经费啊啊啊...."
+inkey$
+print"佟湘玉:给给给,别浪费"
+inkey$
+print"葵花点穴手.....嗖...嗖"
+inkey$
+print"老白功夫提升1,金钱减少50"
+p=p+2:r=r-50:q=q-50:wg=wg+1
+inkey$   
+endif
+goto a
+label suiji
+o=int(ran(1)*10)
+if o=0 then
+name$="老邢":cai$="麻婆豆腐":j=40
+elsif o=1 then
+name$="小米":cai$="剩饭剩菜":j=0
+elsif o=2 then
+name$="小六":cai$="半斤肘子":j=30
+elsif o=3 then
+name$="钱掌柜":cai$="清炖鲍鱼,糖放淡点":j=300
+elsif o=4 then
+name$="钱夫人":cai$="新鲜燕窝":j=250
+elsif o=5 then
+name$="河工":cai$="温点酒,配点下酒的":j=10
+elsif o=6 then
+name$="卖药的":cai$="蛇羹":j=100
+elsif o=7 then
+name$="慧兰":cai$="宫保鸡丁":j=40
+elsif o=8 then
+name$="祝无双":cai$="烤猪":j=50
+elsif o=9 then
+name$="佟石头":cai$="野兔子":j=20
+endif
+return
+label qiangdao
+i=int(ran(1)*10)
+return
+label dasai
+print at(10,1)"举办大赛"
+print at(8,3)"播放键返回"
+print at(3,6)"上曲键.鸡王争霸"
+print at(1,7)
+print"(启动资金:三千每月初二)"
+print at(3,10)"背光键.盗王争霸"
+print at(1,11)
+print"(启动资金:一万每月十五)"
+print at(3,14)"下曲键.大型综艺节目"
+print
+print"(启动资金:十万每年七月十五)"
+f$=inkey$
+clear screen
+if f$="keya5" then
+u=1
+elsif f$="keya7" then
+u=2
+elsif f$="keya6" then
+u=3
+elsif f$="keya3" then
+goto a
+else goto dasai
+endif
+if (u=1) and (q>3000) and (ri=2) then
+q=q+5000
+goto ji
+elsif (q>10000) and (u=2) and (ri=15) then
+q=q+25000
+goto dao
+elsif (u=3) and (q>100000) and (y=7) and (ri=15) then  q=q+250000
+goto zong
+else print"条件不足"
+inkey$
+goto a
+endif
+return
+label ji
+print "ji"
+inkey$
+goto a
+label dao
+print "dao"
+inkey$
+goto a
+label zong
+print "zong"
+inkey$
+goto a
+LABEL e
+CLEAR SCREEN
+FOR E1=0 TO 97:E2=RAN(159):E3=RAN(239):LINE E2,E3 TO E2,239-E2:NEXT
+PRINT REVERSE AT(3,11)"Improved by Moyu."
+INKEY$
+PRINT AT(1,19)

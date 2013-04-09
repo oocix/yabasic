@@ -1,0 +1,192 @@
+FOR F=0 TO 159 STEP 1.59:BOX 0+F,0+F TO 159-F,239-F:NEXT:FOR F1=1 TO 10:PRINT AT(F1,10)"9G之作品":PRINT AT(F1-1,10)" ":PRINT AT(20-F1,12)"翻版不究.":PRINT AT(28-F1,12)" ":FOR F4=0 TO 57:NEXT:NEXT:INKEY$:FOR F2=0 TO 9:PRINT AT(1,10-F2)"         9G之作品          ":PRINT AT(1,11-F2)"                           ":IF F2<=8 THEN:PRINT AT(1,12+F2)"         翻版不究          ":PRINT AT(1,11+F2)"                           ":ENDIF:FOR F3=0 TO 57:NEXT:NEXT
+r=10
+label ss
+clear screen
+n=0
+r=r+j1
+j1=0
+print at(9,2)"--跑*码--"
+print"说明:"
+print"上曲键减少押注,下曲键增加"
+print"押注.背光键开始.播放键结束."
+print"     1￥=10点押注."
+box 5,103 to 143,157
+box 150,103 to 157,157
+for m=0 to 4
+gosub p
+next
+label y
+print at(1,7)"现在￥:                 "
+print at(1,7)"现在￥:",r
+print at(1,8)"现在押注:               "
+print at(1,8)"现在押注:",y
+print at(1,16)"分数:",y3
+k$=inkey$
+if k$="keya5" and (not y=0) then
+y=y-10
+r=r+1
+goto y
+elsif k$="keya3" then
+goto e
+elsif k$="keya6" and (not r=0) then
+y=y+10
+r=r-1
+goto y
+elsif k$="keya7" then
+for c=103 to 157 step 2
+box 150,c to 157,c
+for c1=0 to 77
+next
+next
+goto s
+endif
+goto y
+label s
+for m=0 to 4
+for d=0 to 12
+n=int(ran(9))
+for d1=0 to 123
+next
+gosub p
+next
+if m=0 then n1=n
+elsif m=1 then n2=n
+elsif m=2 then n3=n
+elsif m=3 then n4=n
+elsif m=4 then n5=n
+endif
+next
+y1=y
+if (not((n1=n2)or(n1=n3)or(n1=n4)or(n1=n5)or(n2=n3)or(n2=n4)or(n2=n5)or(n3=n4)or(n3=n5)or(n4=n5))) then
+y1=0
+y=0
+endif
+if ((n1=n2)or(n1=n3)or(n1=n4)or(n1=n5)or(n2=n3)or(n2=n4)or(n2=n5)or(n3=n4)or(n3=n5)or(n4=n5)) then
+y1=int(y1*1.57)
+p$="2"
+gosub p2
+endif
+if (((n1=n2)and((n1=n3)or(n1=n4)or(n1=n5)))or((n1=n3)and((n1=n4)or(n1=n5)))or(n1=n4 and n4=n5)or((n2=n3)and((n2=n4)or(n2=n5)))or(n3=n4 and n4=n5)) then
+y1=y1*10
+p$="3"
+gosub p2
+endif
+if (((n1=n2 and n2=n3)and((n1=n4)or(n1=n5)))or(n1=n3 and n3=n4 and n4=n5)) then
+y1=y1*100
+p$="4"
+gosub p2
+endif
+if (n1=n2 and n2=n3 and n3=n4 and n4=n5) then
+y1=y1*1000
+p$="5"
+gosub p2
+endif
+y2=y1
+print at(1,16)"得分:",y2,"             "
+label s1
+print
+print"上曲键将分数换成￥,下曲"
+print"键将分数换成押注.背光返回."
+k$=inkey$
+if k$="keya7" then
+y3=y3+y2
+print at(1,17)"分数已增加:",y2,"/",y3
+inkey$
+goto ss
+elsif k$="keya5" then
+y1=y1+y3
+y3=0
+goto p1
+elsif k$="keya6" then
+y=y+y2+y3
+print at(1,17)"押注已增加:",y2+y3
+y2=0
+y3=0
+inkey$
+goto ss
+else:goto ss
+endif
+label p1
+if y1=0 then
+print at(1,17)" ￥ +0"
+inkey$
+goto ss
+endif
+print at(1,16)"                         "
+j1=0
+j2=y1/257
+j3=0
+j4=0
+j1=int(y1/10)
+for j=y1 to 0 step -j2
+print at(1,16) "得分:",int(j)
+print at(1,17)" ￥ +",j3
+j4=j4+1
+j3=int(j1/257*j4)
+next
+print at(1,16)"得分:0                   "
+print at(1,17)" ￥ +",j1,"                "
+inkey$
+goto ss
+label p2
+print at(13,15)"×"
+for p2=1 to 11
+for p3=0 to 99
+next
+print at(p2-2,15)"  "
+print at(p2,15)"NU"
+print at(26-p2+2,15)"  "
+print at(26-p2,15) p$+"!"
+next
+return
+label p
+p=27*m+10
+p1=p+20
+for p2=0 to 3
+box p-3,105 to p1+3,155
+next
+if not(n=0 or n=1 or n=7) then
+line p,130 to p1,130
+endif
+if not(n=5 or n=6) then
+line p1,130 to p1,110
+endif
+if not(n=1 or n=4) then
+line p1,110 to p,110
+endif
+if not(n=1 or n=2 or n=3) then
+line p,110 to p,130
+endif
+if not(n=1 or n=3 or n=4 or n=5 or n=7 or n=9) then
+line p,130 to p,150
+endif
+if not(n=1 or n=4 or n=7) then
+line p,150 to p1,150
+endif
+if not(n=2) then
+line p1,150 to p1,130
+endif
+return
+label e
+clear screen
+print at(2,12)"背光键确认退出,任意键返回."
+k$=inkey$
+if k$="keya7" then
+goto ee
+else:goto ss
+endif
+goto ss
+label ee
+clear screen
+m$=" Produced by Moyu ":y=10:gosub eem
+
+m$="  For my best love -XX-":y=12:gosub eem
+print at(0,19)
+end
+label eem
+for x=1 to len(m$)
+print at(x,y) mid$(m$,x,x+1)
+for x0=0 to 57
+next
+next
+return

@@ -1,0 +1,91 @@
+clear screen
+?@(6,6)"电脑程序安装模拟"
+?@(5,9)"全凭想像"
+?@(9,10)"请勿较真"
+?@(12,13)"漠鱼制作"
+?@(5,15)"Just for fun !"
+?@(2,18)"Press any key to begin..."
+inkey$:clear screen
+dim mes$(13)
+dim echo$(10)
+mes$(1)="<<冒险岛>>安装模拟..."
+?@(1,1)mes$(1)
+mes$(2)="正在收集主机信息..."
+?@(1,2)mes$(2)
+ws=3:y=3
+gosub wai
+mes$(3)="系统:WindowsXP SP2"
+?@(1,2)mes$(3)
+mes$(4)="准备开始安装..."
+?@(1,3)mes$(4)
+ws=3:y=4
+gosub wai
+mes$(5)="释放文件至临时文件夹"
+?@(1,3)mes$(5)
+es=7:ey=4
+gosub echo
+for i=1 to 12
+?"                           "
+next
+clear screen
+?@(1,1)mes$(1)
+?@(1,2)mes$(3)
+mes$(6)="释放完毕..!"
+?@(1,3)mes$(6)
+mes$(7)="抽取:main.wz"
+mes$(8)="抽取:sound.wz"
+mes$(9)="抽取:map.wz"
+mes$(10)="抽取:npc.wz"
+mes$(11)="抽取:suffer.wz"
+mes$(12)="抽取:skill.wz"
+mes$(13)="抽取:pic.wz"
+for cq=1 to 7
+iws=cq*30+133
+for i=1 to 100
+?@(1,3+cq)mes$(6+cq),"...",i,"%"
+for iw=1 to iws
+next
+next
+next
+?@(1,11)"抽取完毕..!"
+for i=1 to 100
+?@(1,12)"添加注册表键值...",i,"%"
+next
+?@(1,12)"成功添加键值..!       "
+for i=1 to 100
+?@(1,13)"添加启动项与快捷方式...",i,"%"
+next
+?@(1,13)"成功添加启动项..!          "
+?"<<冒险岛>>"
+?"安装完毕,感谢您的使用!"
+?"Yis.G.E出品,转载注明出处"
+?"不注我也没办法...^_^"
+?"Any key to exit install"
+inkey$
+end
+label echo
+for et=1 to 10
+fn$=""
+for fn=1 to int(ran(3))+2
+fn$=fn$+chr$(int(ran(90))+30)
+next
+echo$(et)="A:/user/temp/"+fn$+".tmp"
+next
+for i=1 to es
+for et=1 to 10
+?echo$(et)
+next
+next
+return
+label wai
+for i=1 to ws
+for x=1 to 23
+?@(x,y)"-"
+if x=23 then
+?@(1,y)"                       "
+fi
+for yw=1 to 123
+next
+next
+next
+return

@@ -1,0 +1,15 @@
+clear screen
+n = 0
+label loops
+m = n + 17
+x = 0
+for n = n to m
+x = x + 1
+print at(1,x) "AscII:",n,"时,字符为:",chr$(n),"哈"
+next n
+print at(1,19) "任意键继续,背光键退出"
+k$=inkey$
+if k$="keya7" then
+ end
+endif
+goto loops

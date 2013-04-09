@@ -1,0 +1,33 @@
+clear screen
+print at(8,2) "关于水仙花数"
+print at(2,4) "水仙花数是一个三位数,它"
+print at(2,5) "的各个位数的立方和等于这"
+print at(2,6) "个数本身"
+print at(4,11) "按任意键开始计算..."
+k$ = inkey$
+clear screen
+print at(0,3)
+for a = 0 to 9
+ for b = 0 to 9
+  for c = 0 to 9
+   d = a*100+b*10+c
+   e = a*a*a+b*b*b+c*c*c
+   if e = 0 then
+    f = e
+    else if e = 1 then
+     g = e
+     else if d = e then
+      print "    水仙花数有:",e,""
+     endif
+    endif
+   endif
+  next c
+ next b
+next a
+print at(5,9) "舍弃数:",f,""
+print at(5,10) "舍弃数:",g,""
+print at(4,15) "按任意键退出..."
+inkey$
+clear screen
+print at(3,9) "Written by Moyu"
+print at(0,17)

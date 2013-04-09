@@ -1,0 +1,62 @@
+n=2000
+print at(7,2) "计算圆周率"
+print at(3,5) "按背光键修改精度..."
+print at(3,6) "播放键开始计算"
+print at(3,7) "停止键退出"
+print at(5,10) "现在精度为",n
+k$ = inkey$
+clear screen
+if k$ = "keya7" then
+print at(2,3) "上一曲键减小精度,"
+print at(2,4) "下一曲键增大精度"
+print at(5,11) "背光键开始计算"
+print at(2,5) "建议精度不要过大"
+print at(3,7) "原精度:n=",n
+label loop
+print at(3,8) "修改精度n=",n
+k$ = inkey$
+if k$ = "keya5" then
+ n = n - 10
+ else if k$ = "keya6" then
+  n = n + 10
+  else if k$ = "keya7" then
+   goto start
+  endif
+ endif
+endif
+goto loop
+ else if k$ = "keya4" then
+ end
+  else if k$ = "keya3" then
+   goto start
+  endif
+ endif
+endif
+label start
+clear screen
+b$=time$
+s=0
+a=1
+print at(1,1)"[精度:",n,"] 计算中............"
+rectangle 2,41 to 157,45:dot 10,43
+for i=1 to n step 2
+s=s+a/i
+a=-a
+if int((i-1)/(10-1))=(i-1)/(10-1) then print at(1,5) i-1:print at(15,5) "已完成:",i/n*100 using "##.##","%":t=t+1:print reverse at(t/2,3) " ":line to i/n*300,43:fi
+if int((i-1)/1000)=(i-1)/1000 then rectangle 0,21 to 159,38:t=0:fi
+next i
+print at(1,5) n:print at(22,5) "100%    "
+print
+print "结果:",4*s
+print
+e$=time$
+print "开始时间:",b$
+print "结束时间:",e$
+print
+print
+print "任意键退出..."
+inkey$
+clear screen
+print at(4,9) "原作者不详"
+print at(5,11) "修改:Moyu"
+print at(0,17)

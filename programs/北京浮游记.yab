@@ -1,0 +1,278 @@
+label yu
+print"北京浮游记"
+print"a7 start"
+print"a4 end"
+k$=inkey$
+if k$="keya7" then goto uu
+elsif k$="keya4" then goto en
+else goto yu
+endif
+label uu
+q=3000:w=100:e=50:r=100
+label t
+clear screen
+if r<=0 then
+print"健康0,You die"
+end
+endif
+print"金钱:",q
+print"库存",y,"/",w
+print"还有",e,"天"
+print"健康:",r
+print
+print"a7黑店"
+print"a5仓库"
+print"a3中介"
+print"a4医院"
+print"a6地铁"
+k$=inkey$
+if k$="keya7" then goto u
+elsif k$="keya5" then goto i
+elsif k$="keya3" then goto o
+elsif k$="keya4" then goto p
+elsif k$="keya6" then goto a
+elsif k$="keya0" then goto en
+else goto t 
+endif
+label u
+s=s3+30:d=d3+100:f=200+f3:g=1000+g3:h=h3+8000:j=j3+11090
+clear screen
+print"a3返回,a7确认"
+print at(7,6)"盗版vcd:$",s
+print at(7,8)"伪劣化妆品:$",d
+print at(7,10)"假手机:$",g
+print at(7,12)"上海小宝:$",h
+print at(7,14)"轿车:$",j
+print at(5,6+v)"=>"
+k$=inkey$
+if (k$="keya5" and v>=2) then v=v-2
+elsif (k$="keya6" and v<8) then v=v+2
+elsif k$="keya3" then goto t
+elsif k$="keya7" then goto k 
+endif
+goto u
+label k
+print at(7,16)"a3买进/a4卖出"
+k$=inkey$
+if k$="keya3" then goto l
+elsif k$="keya4" then goto x
+else goto u
+endif
+label l
+print at(7,17)"数量:",z,"库存:",y,"/",w
+k$=inkey$
+if k$="keya5" then
+z=z-1
+goto l
+elsif k$="keya6" then
+z=z+1
+goto l
+endif
+if z+y>w then
+clear screen
+print"库容不足,可去中介增加"
+inkey$
+goto u
+elsif (v=0 and s*z>q)or(v=2 and d*z>q)or(v=4 and g*z>q)or(v=6 and h*z>q)or (v=8 and j*z>q) then 
+clear screen
+print"余额不足"
+inkey$
+goto u
+else 
+clear screen
+print"OK"
+inkey$
+endif
+if v=0 then
+q=q-s*z
+s2=s2+z
+elsif v=2 then
+d2=d2+z
+q=q-d*z
+elsif v=4 then
+g2=g2+z
+q=q-g*z
+elsif v=6 then
+h2=h2+z
+q=q-h*z
+elsif v=8 then
+j2=j2+z
+q=q-j*z
+endif
+y=y+z
+goto u
+label i
+clear screen
+print"仓库"
+print"盗版vcd:",s2
+print"伪劣化妆品:",d2
+print"假手机:",g2
+print"上海小宝:",h2
+print"轿车:",j2
+goto be
+label x
+print at(7,17)"卖出数:",c
+k$=inkey$
+if k$="keya5" then
+c=c-1
+goto x
+elsif k$="keya6" then
+c=c+1
+goto x
+endif
+if (v=0 and s2<c)or(v=2 and d2<c)or(v=4 and g2<c)or(v=6 and h2<c)or(v=8 and j2<c) then 
+clear screen
+print"物资不足"
+inkey$
+goto u
+else
+clear screen
+print"OK"
+endif
+if v=0 then
+q=q+c*s
+s2=s2-c
+elsif v=2 then
+q=q+c*d
+d2=d2-c
+elsif v=4 then
+q=q+c*g
+g2=g2-c
+elsif v=6 then
+q=q+c*h
+h2=h2-c
+elsif v=8 then
+q=q+c*j
+j2=j2-c
+endif
+y=y-c
+inkey$
+goto u
+label o
+if q<3e4 then
+clear screen
+print"钱不够3万,一边凉快去"
+goto be
+else
+clear screen
+print"1000块,库存加1点"
+endif
+print"要加几点",b
+k$=inkey$
+if k$="keya5" then
+b=b-1
+goto o
+elsif k$="keya6" then
+b=b+1
+goto o
+endif
+if b=0 then
+goto t
+elsif b*1e3<=q then
+clear screen
+print"库存加了",b,"点"
+q=q-b*1e3
+w=w+b
+goto be
+elsif b*1e3>q then
+goto t
+endif
+label p
+if r=100 then
+clear screen
+print"健康满,不需治疗"
+inkey$
+goto t
+else
+clear screen
+print"加几点健康:",n
+k$=inkey$
+if k$="keya5" then
+n=n-1
+goto p
+elsif k$="keya6" then
+n=n+1
+goto p
+endif
+endif
+if n*100>q then
+print"药费不足,滚"
+goto be
+elsif n+r>100 then
+clear screen
+print"健康过100了"
+inkey$
+goto t
+else
+r=r+n
+q=q-n*100
+clear screen
+print"OK"
+goto be
+endif
+label a
+clear screen
+print"Any key OK"
+inkey$
+clear screen
+print"已到达"
+s3=int(ran(20)):d3=int(ran(50)):g3=int(ran(500)):h3=int(ran(1000)):j3=int(ran(2000)):m=int(ran(13)):e=e-1
+inkey$
+if e=1 then
+print"该清库了,回家"
+goto be 
+elsif e=0 then
+clear screen
+print"得分:",q
+else goto n
+endif
+if q<1e7 and e=0 then
+print"NB青年"
+elsif q>1e7 and e=0 then 
+print"进入十大富豪榜"
+endif
+end
+label n
+if m=1 then
+print"大家都抽风地购车"
+j3=1e5
+elsif m=2 then
+print"上海小宝功效强劲,赛过伟哥"
+h3=51234
+goto be
+elsif (m=3)or(m=4) then
+print"邻居说我样衰,扇我一巴掌,健康下降10"
+r=r-10
+goto be
+elsif (m=5)or(m=6) then
+print"天气变坏,健康下降9,市场冷淡"
+r=r-9
+goto be
+elsif (m=7)or(m=8) then
+print"学生都买手机"
+g3=9121
+goto be
+elsif (m=9)or(m=10) then
+print"我衰我用化妆品"
+d3=1211
+goto be
+elsif (m=0)or(m=11) then
+print"读书不如在家看vcd"
+s3=112
+goto be
+elsif (m=12)or(m=13) then
+print"请客吃饭,钱少5%"
+q=int(q*0.95)
+goto be
+endif
+label be
+inkey$
+goto t
+label en
+clear screen
+print"a7退出"
+k$=inkey$
+if k$="keya7" then
+end
+else goto t
+endif

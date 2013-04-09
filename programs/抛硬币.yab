@@ -1,0 +1,38 @@
+clear screen
+n = 300
+print at(5,9) "Any key to begin.."
+inkey$
+clear screen
+print at(5,1) "拋币模拟"
+print at(2,3) "抛掷次数:",n
+box 0,170 to 159,180
+print at(10,13) "Waitting.."
+m = n
+for i = 1 to n
+ a = int(ran(10))
+ if a=0 or a=1 or a=2 or a=3 or a=4 then
+  z = z + 1
+ else
+  f = f +1
+ endif
+ print at(2,5) "正在抛掷第",i,"个"
+ line i*159/m,170 to i*159/m,180
+ print at(7,17) "已完成:",i/m using"#.##","%"
+next i
+print at(2,5) "已完成.!       "
+print at(3,6) "正面向上:",z
+print at(5,7) "概率:",z/n using"##.##","%"
+print at(3,8) "反面向上:",f
+print at(5,9)"概率:",f/n using"##.##","%"
+print at(10,13) "   OK.!     "
+inkey$
+clear screen
+line 20,77 to 20,107
+line 40,30 to 40,147
+line 60,77 to 60,107
+line 70,77 to 130,77
+line 130,77 to 70,117
+line 70,117 to 130,117
+line 130,117 to 130,97
+print at(9,12) "Produced by Moyu"
+print at(0,19)
