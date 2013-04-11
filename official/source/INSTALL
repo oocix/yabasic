@@ -1,0 +1,24 @@
+
+To build yabasic just type:
+
+ ./runme
+
+If everything works fine, the file "yabasic" will be created
+in this directory. If you have the appropriate (root) privileges,
+just type:
+
+ make install
+
+to install the executable yabasic and its man page.
+
+if anything goes wrong, please send a mail to mail@yabasic.de
+including the file runme.log.
+
+
+Aternatively you may do the following to build and install yabasic:
+
+ ./configure
+ make
+ make check
+ make install
+

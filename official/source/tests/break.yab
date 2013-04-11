@@ -1,0 +1,17 @@
+#!./yabasic
+do
+break
+a=1
+loop
+if a error "loop"
+
+for a=1 to 3
+switch a
+case 1:break
+case 2:continue
+end switch
+if a=2 error "switch"
+next a
+
+exit 0
+

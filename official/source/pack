@@ -1,0 +1,295 @@
+#!/usr/bin/perl
+#
+# Pack and check a new distribution of yabasic
+#
+
+use IPC::Open3;
+use Time::Local;
+use File::Copy;
+
+# Variables, that can be configured
+$sourcedir="/home/ihm/yabmain";
+$appname="yabasic";
+$yabexe="yabasic";
+$yabsrc="configure.in";
+$yabdoku="yabasic.htm";
+$from_linux="/mnt/usb-drive/from_linux/yabasic";
+$from_windows="/mnt/usb-drive/from_windows/yabasic";
+# name of rpm specfile
+$specfile="yabasic.spec";
+
+
+# enhance path
+$ENV{PATH}.=":/usr/local/bin";
+
+# files to copy from usb-drive
+@fromlist=("function.c",
+	   "graphic.c",
+	   "io.c",
+	   "main.c",
+	   "symbol.c",
+	   "yabasic.h");
+
+# files to copy to usb-drive, name of tarfile and rpmfile will be pushed below
+@tolist=("$sourcedir/function.c",
+	 "$sourcedir/graphic.c",
+	 "$sourcedir/io.c",
+	 "$sourcedir/main.c",
+	 "$sourcedir/symbol.c",
+	 "$sourcedir/yabasic.h",
+	 "$sourcedir/bison.c",
+	 "$sourcedir/bison.h",
+	 "$sourcedir/config.h",
+	 "$sourcedir/flex.c",
+	 "$sourcedir/yabasic.htm",
+	 "$sourcedir/yabasic.bison",
+	 "$sourcedir/demo.yab",
+	 "$sourcedir/NEWS",
+	 "$sourcedir/yabasic.flex",
+	 );
+
+# list of files, that need to be renamed 
+%torename=("yabasic.flex"=>"flex.txt",
+	   "yabasic.bison"=>"bison.txt",
+	   "NEWS"=>"news.txt",
+	   "yabasic.tar.Z"=>"yab.tar.Z");
+
+# list binary files
+%binary=("yabasic.tar.Z"=>1); # rpm-file will be added below
+
+# Autoflush stdout
+$|=1;
+$stages=$ARGV[0];
+$stages="123" if !$stages;
+
+if (index($stages,"1")>=0) {
+#
+# Check date of files
+#
+    print "\nCopying files from usb-drive ($from_windows) ...\n";
+    for $name (@fromlist) {
+	my $sname=$name;
+	$sname=~s/.*\///;
+	$totime=stime($name);
+	$fromtime=stime("$from_windows/$name");
+
+	if (!$fromtime) {
+	    print "  WARNING: Can't find $name on usb-drive !\n";
+	    next;
+	}
+	
+	unless (-s "$name") {
+	    print "  WARNING: $name has zero size \n";
+	    next;
+	}
+
+	if ($fromtime>$totime+120) {
+	    $diff=$fromtime-$totime;
+	    $difft=$diff." sec";
+	    $difft=sprintf("%.2g",($diff/60))." min" if ($diff>60*2);
+	    $difft=sprintf("%.2g",($diff/3600))." hours" if ($diff>3600*2);
+	    $difft=sprintf("%.2g",($diff/86400))." days" if ($diff>86400*2);
+	    print "$sname is $difft newer on usb-drive, need to copy ... ";
+	    
+	    if (copy("$name",".")) {
+		print "done.\n";
+		$copied++;
+	    } else {
+		print "ERROR: $!\n";
+		endit();
+	    }
+	}
+    }
+
+    if ($copied) {
+	print "\nCopied $copied file(s), you better check ...\n\n";
+	endit();
+    }
+    print "All files are up to date.\n";
+}
+
+if (index($stages,"2")>=0) {
+#
+# crosscheck Versions
+#
+    print "\nChecking versions:\n";
+    open3(*WRT,*RDR,*ERR,"./$yabexe -?") || die "Can't open $yabexe\n";
+    while(<ERR>) {
+	if (/yabasic\s+version\s+(\d\.\d+)/i) {
+	    $exever=$1;
+	    print "  $exever ($yabexe)\n";
+	    last;
+	}
+    }
+    die "Can't get version from $yabexe\n" if !defined($exever);
+    
+    open(RDR,$yabsrc) || die "Can't open $yabsrc\n";
+    while(<RDR>) {
+	if (/\s*AM_INIT_AUTOMAKE\s*\(\s*yabasic\s*,\s*(\d\.\d+)\s*\)/) {
+	    $sourcever=$1;
+	    print "  $sourcever ($yabsrc)\n";
+	    last;
+	}	
+    }
+    die "Can't get version from $yabsrc\n" if !defined($sourcever);
+    
+    open(RDR,$yabdoku) || die "Can't open $yabdoku\n";
+    while(<RDR>) {
+	if (/(2\.\d{1,2})/) {
+	    $dokuver=$1;
+	    print "  $dokuver ($yabdoku)\n";
+	    last;
+	}
+    }
+    die "Can't get version from $yabdoku\n" if !defined($dokuver);
+    
+    if (abs($exever-$dokuver)<=0.009 && $exever==$sourcever) {
+	print "Okay.\n";
+    } else {
+	print "Mismatch !\n";
+	die "Better go and bring them in line\n";
+    }
+    
+    if ($>) {die "Need to be root (not $>) to create rpm-file !\n";}
+    
+#
+# create, compress and copy sourcepack for rpm
+#
+    $spackfile="yabasic-$exever.tar.gz";
+    my $command="make dist-gzip 2>&1";
+    open COMMAND,"$command |" or die "Could not start '$command': $!\n";
+    print "Creating tar archive with sources ";
+    $out="";
+    while(<COMMAND>) {
+	print ".";
+	$out.="  >> $_";
+    }
+    close COMMAND;
+    die "\nERROR !\n\nCommand '$command' returned:\n$out\n" if $?;
+    print " done.\n";
+    $command="cp -f $spackfile /usr/src/packages/SOURCES 2>/dev/null";
+    die "Can't move $spackfile ! Command: $command\n" if system($command);
+    push @tolist,"$sourcedir/$spackfile";
+
+#    
+# create rpm package
+#
+    print "Putting version into $specfile ... ";
+    open(SPEC,$specfile) || die "Can't open $specfile\n";
+    @spec=<SPEC>;
+    close(SPEC);
+    open(SPEC,"> $specfile") || die "Can't open $specfile\n";
+    while($line=shift(@spec)) {
+	if ($line=~/Version:\s*\d\.\d+/) {
+	    print SPEC "Version: $exever\n";
+	} elsif ($line=~/Source:/) {
+	    print SPEC "Source: yabasic-$exever.tar.gz\n";
+	} else {
+	    print SPEC $line;
+	}
+    }
+    close(SPEC);
+    print "done.\n";
+    
+    print "Creating rpm-package with linux binaries ";
+    $command="rpmbuild -bb --clean yabasic.spec --buildroot /usr/src/packages/BUILD/yabasic";
+    die "Couldn't execute $command\n" if (!open(RPM,"$command 2>&1|"));
+    while(<RPM>) {
+	push @rpmout,$_;
+	if (/^Wrote:\s*(\S*)\s*$/ && !$wrote) {print " done.\n\n$_";$wrote=$1;}
+	$lcount++;
+	print "." if (!$wrote && !($lcount%5));
+    }
+    close(RPM);
+    if (!$wrote) {
+	print " something went wrong,\nrpm output:\n    ";
+	print join "   ",@rpmout;
+	die "\n";
+    }
+    
+    $command="rpm -i yabasic";
+    die "Couldn't execute $command\n" if (!open(RPM,"$command 2>&1|"));
+    undef @rpmout;
+    print "\nTrying to install ... ";
+    if ($out=qx(rpm -i --force --nodeps $wrote 2>&1)) {
+	print "Error !\n";
+	print "rpm returned: $out\n";
+	endit();
+    } else {
+	print "done.\n";
+    }
+
+#
+# add rpm file to lists
+#
+    push @tolist,$wrote;
+    $short=substr($wrote,rindex($wrote,"/")+1);
+    $binary{$short}=1;
+}
+
+if (index($stages,"3")>=0) {
+#
+# copy selected files to usb-drive
+#
+    print "\nDeleting previous versions from usb-drive ($from_linux) ... ";
+    for $f (glob("$from_linux/*")) {
+	unlink $f or warn "Could not delete $f: $!\n";
+    }
+    print "done.\n";
+    print "\nCopying files to usb-drive ($from_linux) ...\n";
+    for $toname (@tolist) {
+	$rename="";
+	$sopt="";
+	$pos=rindex($toname,"/");
+        if ($pos>0) {
+	    $shortname=substr($toname,$pos+1);
+	} else {
+	    $shortname=$toname;
+	}
+        if (exists($torename{$shortname})) {
+	    $rename=$torename{$shortname};
+        } else {
+	    $rename=$shortname;
+        }
+	$toname="../$toname" if substr($toname,0,1) ne "/";
+	if (copy("$toname","$from_linux/$rename")) {
+	    print " $shortname";
+	    print " as $rename" if $rename ne $shortname;
+	    print "\n";
+	    if ($binary{$shortname}) {
+		print "Skipping recode of $toname .\n";
+###		system("recode ..pc/ $toname") && warn "Could not execute 'recode ..pc/ $toname' ($!) !\n"; 
+	    }
+	} else {
+	    print "  WARNING: Couldn not copy $toname to $from_linux/$rename ($!) !\n";
+	}
+    }
+    print "done.\n";
+
+    print "\nCreating backup ... ";
+    $command="cp -rp * /opt/yabasic";
+    if (system($command)) {
+	print "error !\n"; 
+	print "Command has been:\n\n$command\n\n";
+	endit();
+    }
+    print "done.\n";
+    
+    endit();
+}
+
+endit();
+
+#
+# return modification time in seconds since epoch
+#
+sub stime {
+    $name=shift;
+    my $time=(stat($name))[9];
+
+    return $time;
+}
+
+sub endit {
+    system("chown -R ihm:users ~ihm/yabmain") unless $>;
+}
